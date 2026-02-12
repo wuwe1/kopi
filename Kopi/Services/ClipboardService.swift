@@ -103,11 +103,16 @@ final class ClipboardService {
             return ClipboardContent(contentType: "rtf", textContent: plainText, blobData: rtfData, sourceApp: sourceApp)
         }
 
-        // 5. HTML
+        // 5. HTML — convert to Markdown for content, keep raw HTML in blobData
         if types.contains(.html),
            let htmlData = pasteboard.data(forType: .html) {
+            let htmlString = String(data: htmlData, encoding: .utf8)
+                ?? String(data: htmlData, encoding: .unicode)
+                ?? ""
+            let markdown = HTMLToMarkdown.shared.convert(htmlString)
             let plainText = pasteboard.string(forType: .string)
-            return ClipboardContent(contentType: "html", textContent: plainText, blobData: htmlData, sourceApp: sourceApp)
+            let textContent = markdown ?? plainText
+            return ClipboardContent(contentType: "html", textContent: textContent, blobData: htmlData, sourceApp: sourceApp)
         }
 
         // 6. Color

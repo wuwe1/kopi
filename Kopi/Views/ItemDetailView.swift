@@ -42,54 +42,20 @@ struct ItemDetailView: View {
             Divider()
 
             // Content
-            ScrollView {
-                detailContent
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(16)
+            if item.contentType == "html" {
+                HTMLDetailContent(item: item, viewModel: viewModel)
+            } else {
+                ScrollView {
+                    detailContent
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(16)
+                }
+                .frame(maxHeight: .infinity)
+
+                Divider()
+
+                defaultFooter
             }
-            .frame(maxHeight: .infinity)
-
-            Divider()
-
-            // Footer
-            HStack {
-                Text(item.createdAt, format: .dateTime)
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-
-                Spacer()
-
-                if item.contentType == "file" {
-                    Button {
-                        revealInFinder()
-                    } label: {
-                        Label("Reveal in Finder", systemImage: "folder")
-                            .font(.system(size: 12))
-                    }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                }
-
-                Button {
-                    viewModel.copyToClipboard(item)
-                } label: {
-                    Label("Copy", systemImage: "doc.on.doc")
-                        .font(.system(size: 12))
-                }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.small)
-
-                Button(role: .destructive) {
-                    viewModel.deleteItem(item)
-                } label: {
-                    Label("Delete", systemImage: "trash")
-                        .font(.system(size: 12))
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
-            }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
         }
     }
 
@@ -149,8 +115,162 @@ struct ItemDetailView: View {
         }
     }
 
+    private var defaultFooter: some View {
+        HStack {
+            Text(item.createdAt, format: .dateTime)
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+
+            Spacer()
+
+            if item.contentType == "file" {
+                Button {
+                    revealInFinder()
+                } label: {
+                    Label("Reveal in Finder", systemImage: "folder")
+                        .font(.system(size: 12))
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+            }
+
+            Button {
+                viewModel.copyToClipboard(item)
+            } label: {
+                Label("Copy", systemImage: "doc.on.doc")
+                    .font(.system(size: 12))
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.small)
+
+            Button(role: .destructive) {
+                viewModel.deleteItem(item)
+            } label: {
+                Label("Delete", systemImage: "trash")
+                    .font(.system(size: 12))
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+    }
+
     private func revealInFinder() {
         let url = URL(fileURLWithPath: item.content)
         NSWorkspace.shared.activateFileViewerSelecting([url])
+    }
+}
+
+// MARK: - HTML Detail with Tabs
+
+private enum HTMLTab: String, CaseIterable {
+    case markdown = "Markdown"
+    case html = "HTML"
+    case plainText = "Plain Text"
+}
+
+private struct HTMLDetailContent: View {
+    let item: ClipboardItem
+    @Bindable var viewModel: ClipboardViewModel
+    @State private var selectedTab: HTMLTab = .markdown
+
+    var body: some View {
+        VStack(spacing: 0) {
+            // Tab bar
+            Picker("", selection: $selectedTab) {
+                ForEach(HTMLTab.allCases, id: \.self) { tab in
+                    Text(tab.rawValue).tag(tab)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+
+            Divider()
+
+            // Content based on selected tab
+            ScrollView {
+                Text(contentForTab)
+                    .font(.system(size: 12, design: .monospaced))
+                    .textSelection(.enabled)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(16)
+            }
+            .frame(maxHeight: .infinity)
+
+            Divider()
+
+            // Footer with contextual copy buttons
+            HStack {
+                Text(item.createdAt, format: .dateTime)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+
+                Spacer()
+
+                Menu {
+                    Button {
+                        viewModel.copyAsMarkdown(item)
+                    } label: {
+                        Label("Copy Markdown", systemImage: "text.quote")
+                    }
+                    Button {
+                        viewModel.copyAsRawHTML(item)
+                    } label: {
+                        Label("Copy HTML", systemImage: "chevron.left.forwardslash.chevron.right")
+                    }
+                    Button {
+                        viewModel.copyAsPlainText(item)
+                    } label: {
+                        Label("Copy Plain Text", systemImage: "doc.plaintext")
+                    }
+                    Divider()
+                    Button {
+                        viewModel.copyToClipboard(item)
+                    } label: {
+                        Label("Copy Original (Rich Text)", systemImage: "doc.on.doc")
+                    }
+                } label: {
+                    Label("Copy", systemImage: "doc.on.doc")
+                        .font(.system(size: 12))
+                }
+                .menuStyle(.borderedButton)
+                .controlSize(.small)
+
+                Button(role: .destructive) {
+                    viewModel.deleteItem(item)
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                        .font(.system(size: 12))
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+        }
+    }
+
+    private var contentForTab: String {
+        switch selectedTab {
+        case .markdown:
+            return item.content
+        case .html:
+            if let blobData = item.blobData {
+                return String(data: blobData, encoding: .utf8)
+                    ?? String(data: blobData, encoding: .unicode)
+                    ?? ""
+            }
+            return ""
+        case .plainText:
+            if let blobData = item.blobData {
+                let html = String(data: blobData, encoding: .utf8)
+                    ?? String(data: blobData, encoding: .unicode)
+                    ?? item.content
+                return HTMLToMarkdown.stripHTMLTags(html)
+            }
+            return item.content
+        }
     }
 }

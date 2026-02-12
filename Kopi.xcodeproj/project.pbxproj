@@ -27,6 +27,7 @@
 		E06C61149CDE25481EA43C2C /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB885028F22957C4828D651 /* ClipboardMonitor.swift */; };
 		F35FFF4B373A72E9CD4D7F50 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 291E6FB4DF7E363BFBEA462C /* EmptyStateView.swift */; };
 		F9B54FCBB426C606428AE22A /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B41CD3B566022A892C229F5B /* AppSettings.swift */; };
+		D4E5F6A7B8C9D0E1F2A3B4C5 /* HTMLToMarkdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D4E5F6A7B8C9D0E1F2A3B4 /* HTMLToMarkdown.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,6 +53,7 @@
 		B4265D1F2588DF18859F70E8 /* ClipboardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItem.swift; sourceTree = "<group>"; };
 		C8FA1A5847216C51EE8DE7A3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F9D96B387E102C04D29B5B51 /* ClipboardItemRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItemRepository.swift; sourceTree = "<group>"; };
+		C3D4E5F6A7B8C9D0E1F2A3B4 /* HTMLToMarkdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTMLToMarkdown.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				7D59274BE41BF62360144A29 /* Constants.swift */,
+				C3D4E5F6A7B8C9D0E1F2A3B4 /* HTMLToMarkdown.swift */,
 				1BB7379E44A2E3BCF312AAB0 /* String+Extensions.swift */,
 			);
 			path = Utilities;
@@ -275,6 +278,7 @@
 				6A83A4246EBE2B742A04A9A8 /* PinnedItemsListView.swift in Sources */,
 				852D2D76963FA5451A3701A7 /* SettingsView.swift in Sources */,
 				2CDB7EC0C6D7FA03F11A946C /* String+Extensions.swift in Sources */,
+				D4E5F6A7B8C9D0E1F2A3B4C5 /* HTMLToMarkdown.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

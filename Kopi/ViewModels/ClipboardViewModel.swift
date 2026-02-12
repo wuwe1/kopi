@@ -96,6 +96,33 @@ final class ClipboardViewModel {
         refreshCurrentContent()
     }
 
+    func copyAsMarkdown(_ item: ClipboardItem) {
+        clipboardService.writeText(item.content)
+        refreshCurrentContent()
+    }
+
+    func copyAsPlainText(_ item: ClipboardItem) {
+        if let blobData = item.blobData {
+            let html = String(data: blobData, encoding: .utf8)
+                ?? String(data: blobData, encoding: .unicode)
+                ?? item.content
+            let plain = HTMLToMarkdown.stripHTMLTags(html)
+            clipboardService.writeText(plain)
+        } else {
+            clipboardService.writeText(item.content)
+        }
+        refreshCurrentContent()
+    }
+
+    func copyAsRawHTML(_ item: ClipboardItem) {
+        if let blobData = item.blobData,
+           let html = String(data: blobData, encoding: .utf8)
+                ?? String(data: blobData, encoding: .unicode) {
+            clipboardService.writeText(html)
+        }
+        refreshCurrentContent()
+    }
+
     func deleteItem(_ item: ClipboardItem) {
         do {
             try repository.deleteItem(item)
