@@ -1,0 +1,35 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 16 16] /Contents 4 0 R /Resources << >> >>
+endobj
+4 0 obj
+<< /Length 197 >>
+stream
+% Pin icon - simple clipboard shape
+0 0 0 rg
+% Clipboard body
+3 1 m 13 1 l 13 11 l 3 11 l h f
+% Clipboard top
+5 11 m 5 13 l 7 13 l 7 14 l 9 14 l 9 13 l 11 13 l 11 11 l h f
+% Clip
+7 13 m 7 15 l 9 15 l 9 13 l h f
+endstream
+endobj
+xref
+0 5
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000230 00000 n 
+trailer
+<< /Size 5 /Root 1 0 R >>
+startxref
+479
+%%EOF
