@@ -8,6 +8,13 @@ final class ClipboardViewModel {
     var pinnedItems: [ClipboardItem] = []
     var selectedItem: ClipboardItem?
     var showingDetail: Bool = false
+    var searchText: String = ""
+
+    var filteredItems: [ClipboardItem] {
+        guard !searchText.isEmpty else { return pinnedItems }
+        let query = searchText.lowercased()
+        return pinnedItems.filter { $0.content.lowercased().contains(query) }
+    }
 
     private let repository = ClipboardItemRepository()
     private let monitor = ClipboardMonitor()

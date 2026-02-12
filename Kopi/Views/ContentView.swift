@@ -32,12 +32,22 @@ struct ContentView: View {
             // Section header
             pinnedSectionHeader
 
+            // Search bar (only show when there are items)
+            if !viewModel.pinnedItems.isEmpty {
+                searchBar
+            }
+
             // Pinned Items List
             if viewModel.pinnedItems.isEmpty {
                 EmptyStateView()
                     .frame(height: 120)
+            } else if viewModel.filteredItems.isEmpty {
+                Text("No results for \"\(viewModel.searchText)\"")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+                    .frame(height: 60)
             } else {
-                PinnedItemsListView(viewModel: viewModel)
+                PinnedItemsListView(items: viewModel.filteredItems, viewModel: viewModel)
                     .frame(maxHeight: 320)
             }
 
@@ -91,6 +101,34 @@ struct ContentView: View {
         }
         .padding(.horizontal, 16)
         .padding(.top, 8)
+        .padding(.bottom, 4)
+    }
+
+    private var searchBar: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 11))
+                .foregroundStyle(.tertiary)
+
+            TextField("Search...", text: $viewModel.searchText)
+                .textFieldStyle(.plain)
+                .font(.system(size: 12))
+
+            if !viewModel.searchText.isEmpty {
+                Button {
+                    viewModel.searchText = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 11))
+                        .foregroundStyle(.tertiary)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 5)
+        .background(.quaternary.opacity(0.3), in: RoundedRectangle(cornerRadius: 6))
+        .padding(.horizontal, 12)
         .padding(.bottom, 4)
     }
 
