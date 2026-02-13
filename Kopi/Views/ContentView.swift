@@ -4,14 +4,37 @@ struct ContentView: View {
     @Bindable var viewModel: ClipboardViewModel
     @Environment(\.openWindow) private var openWindow
 
+    private var panelWidth: CGFloat {
+        viewModel.showingDetail ? 500 : 340
+    }
+
+    private var screenMaxHeight: CGFloat {
+        NSScreen.main?.visibleFrame.height ?? 800
+    }
+
+    private var detailViewHeight: CGFloat {
+        min(560, screenMaxHeight)
+    }
+
+    private var pinnedListHeight: CGFloat {
+        let rowHeight: CGFloat = 44
+        let count = CGFloat(viewModel.filteredItems.count)
+        let naturalHeight = count * rowHeight + 8
+        let maxListHeight = max(screenMaxHeight - 200, 120)
+        return min(naturalHeight, maxListHeight)
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             if viewModel.showingDetail, let item = viewModel.selectedItem {
                 ItemDetailView(item: item, viewModel: viewModel)
+                    .frame(height: detailViewHeight)
             } else {
                 mainListView
             }
         }
+        .frame(width: panelWidth)
+        .animation(.easeInOut(duration: 0.2), value: viewModel.showingDetail)
         .onAppear {
             viewModel.refreshCurrentContent()
         }
@@ -48,7 +71,7 @@ struct ContentView: View {
                     .frame(height: 60)
             } else {
                 PinnedItemsListView(items: viewModel.filteredItems, viewModel: viewModel)
-                    .frame(maxHeight: 320)
+                    .frame(height: pinnedListHeight)
             }
 
             Divider()

@@ -6,6 +6,10 @@
 
 <p align="center">A lightweight macOS menu bar clipboard manager built with SwiftUI.</p>
 
+<p align="center">
+  <a href="#features">English</a> · <a href="#功能介绍">中文</a>
+</p>
+
 Kopi lives in your menu bar, silently monitoring your clipboard and keeping a searchable history of everything you copy — text, images, files, HTML, colors, and more.
 
 ## Features
@@ -22,6 +26,23 @@ Kopi lives in your menu bar, silently monitoring your clipboard and keeping a se
 - **Copy in Multiple Formats** — HTML items can be copied as Markdown, plain text, raw HTML, or original rich text
 - **Launch at Login** — Optional auto-start when you log in
 - **Lightweight** — Local SQLite database, no cloud, no telemetry
+
+## 功能介绍
+
+Kopi 是一款轻量的 macOS 菜单栏剪贴板管理工具。它静静地运行在菜单栏中，自动记录你复制的一切内容，随时可用。
+
+- **菜单栏常驻** — 不占 Dock 位置，点击菜单栏图标即可打开
+- **自动记录** — 后台监听剪贴板变化，无需手动操作
+- **多格式支持** — 文本、URL、图片、文件、HTML、RTF、颜色全部支持
+- **智能识别** — 自动判断剪贴板内容类型并分类存储
+- **快速搜索** — 输入关键词即可过滤历史记录
+- **HTML 转 Markdown** — 复制的网页内容自动转换为 Markdown，支持语法高亮预览
+- **隐私保护** — 自动跳过密码管理器（如 1Password）的隐藏内容
+- **去重机制** — 基于 SHA256 哈希，相同内容不会重复保存
+- **置顶收藏** — 重要内容可以置顶，方便反复使用
+- **多格式复制** — HTML 内容可选择以 Markdown、纯文本、原始 HTML 或富文本格式复制
+- **开机自启** — 支持登录时自动启动
+- **本地存储** — 数据保存在本地 SQLite 数据库，无云端同步，无数据追踪
 
 ## Screenshots
 

@@ -11,8 +11,6 @@ struct KopiApp: App {
     var body: some Scene {
         MenuBarExtra {
             ContentView(viewModel: viewModel)
-                .frame(width: 340)
-                .frame(maxHeight: 500)
         } label: {
             Image("MenuBarIcon")
                 .renderingMode(.template)
