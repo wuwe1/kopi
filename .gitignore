@@ -22,3 +22,6 @@ Packages/
 
 # Kopi data (local only)
 .kopi/
+
+# Claude Code
+.claude/
